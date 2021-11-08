@@ -6,6 +6,10 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] float moveMultiplier = 30f;
 
+    [SerializeField] float xRange = 14f;
+    [SerializeField] float yRange = 16f;
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -20,10 +24,12 @@ public class PlayerController : MonoBehaviour
 
         float xOffset = xThrow * Time.deltaTime * moveMultiplier;
         float xNewLocal = transform.localPosition.x + xOffset;
+        float xClamp = Mathf.Clamp(xNewLocal, -xRange, xRange);
 
         float yOffset = yThrow * Time.deltaTime * moveMultiplier;
         float yNewLocal = transform.localPosition.y + yOffset;
+        float yClamp = Mathf.Clamp(yNewLocal, 0.93f, yRange);
 
-        transform.localPosition = new Vector3(xNewLocal, yNewLocal, zNewLocal);
+        transform.localPosition = new Vector3(xClamp, yClamp, transform.localPosition.z);
     }
 }
