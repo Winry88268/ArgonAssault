@@ -19,8 +19,14 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float xThrow =  Input.GetAxis("Horizontal");
-        float yThrow =  Input.GetAxis("Vertical");
+        ProcessTranslation();
+        ProcessRotation();
+    }
+
+    void ProcessTranslation()
+    {
+        float xThrow = Input.GetAxis("Horizontal");
+        float yThrow = Input.GetAxis("Vertical");
 
         float xOffset = xThrow * Time.deltaTime * moveMultiplier;
         float xNewLocal = transform.localPosition.x + xOffset;
@@ -31,5 +37,10 @@ public class PlayerController : MonoBehaviour
         float yClamp = Mathf.Clamp(yNewLocal, 0.93f, yRange);
 
         transform.localPosition = new Vector3(xClamp, yClamp, transform.localPosition.z);
+    }
+
+    void ProcessRotation()
+    {
+        transform.localRotation = Quaternion.Euler()
     }
 }
