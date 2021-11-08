@@ -5,10 +5,15 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] float moveMultiplier = 30f;
-
     [SerializeField] float xRange = 14f;
-    [SerializeField] float yRange = 16f;
+    [SerializeField] float yRange = 7f;
+    
+    [SerializeField] float pitchFactor = -2f;
+    [SerializeField] float pitchMultiplier = -10f;
+    [SerializeField] float yawFactor = 2.5f;
+    [SerializeField] float rollMultiplier = -30f;
 
+    float xThrow, yThrow;
 
     // Start is called before the first frame update
     void Start()
@@ -25,8 +30,8 @@ public class PlayerController : MonoBehaviour
 
     void ProcessTranslation()
     {
-        float xThrow = Input.GetAxis("Horizontal");
-        float yThrow = Input.GetAxis("Vertical");
+        xThrow = Input.GetAxis("Horizontal");
+        yThrow = Input.GetAxis("Vertical");
 
         float xOffset = xThrow * Time.deltaTime * moveMultiplier;
         float xNewLocal = transform.localPosition.x + xOffset;
@@ -34,13 +39,20 @@ public class PlayerController : MonoBehaviour
 
         float yOffset = yThrow * Time.deltaTime * moveMultiplier;
         float yNewLocal = transform.localPosition.y + yOffset;
-        float yClamp = Mathf.Clamp(yNewLocal, 0.93f, yRange);
+        float yClamp = Mathf.Clamp(yNewLocal, -yRange, yRange);
 
         transform.localPosition = new Vector3(xClamp, yClamp, transform.localPosition.z);
     }
 
     void ProcessRotation()
     {
-        transform.localRotation = Quaternion.Euler()
+        float positionalPitch = transform.localPosition.y * pitchFactor;
+        float controllerPitch = yThrow * pitchMultiplier;
+        
+        float pitch =  positionalPitch + controllerPitch;
+        float yaw = transform.localPosition.x * yawFactor;
+        float roll = xThrow * rollMultiplier;
+
+        transform.localRotation = Quaternion.Euler(pitch, yaw, roll);
     }
 }
