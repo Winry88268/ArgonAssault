@@ -13,6 +13,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float yawFactor = 2.5f;
     [SerializeField] float rollMultiplier = -30f;
 
+    [SerializeField] GameObject[] lasers;
+
     float xThrow, yThrow;
 
     // Start is called before the first frame update
@@ -26,6 +28,7 @@ public class PlayerController : MonoBehaviour
     {
         ProcessTranslation();
         ProcessRotation();
+        ProcessFire();
     }
 
     void ProcessTranslation()
@@ -54,5 +57,25 @@ public class PlayerController : MonoBehaviour
         float roll = xThrow * rollMultiplier;
 
         transform.localRotation = Quaternion.Euler(pitch, yaw, roll);
+    }
+
+    void ProcessFire()
+    {
+        if (Input.GetButton("Fire1"))
+        {
+            LaserFire(true);
+        }
+        else
+        {
+            LaserFire(false);
+        }
+    }
+
+    void LaserFire(bool activity)
+    {
+        foreach(GameObject i in lasers)
+        {
+            i.SetActive(activity);
+        }
     }
 }

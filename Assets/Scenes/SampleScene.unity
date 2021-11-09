@@ -123,6 +123,16 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &25242429 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 794012773528356383, guid: a02190c444d2a7849bf439486e5beb0a, type: 3}
+  m_PrefabInstance: {fileID: 7147286153963479530}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &381028596 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7520764676333442383, guid: a02190c444d2a7849bf439486e5beb0a, type: 3}
+  m_PrefabInstance: {fileID: 7147286153963479530}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -553,6 +563,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1570715976}
     m_Modifications:
+    - target: {fileID: 4448034073274095412, guid: a02190c444d2a7849bf439486e5beb0a, type: 3}
+      propertyPath: looping
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6836867365267358820, guid: a02190c444d2a7849bf439486e5beb0a, type: 3}
+      propertyPath: looping
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7142808698747107914, guid: a02190c444d2a7849bf439486e5beb0a, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -602,6 +620,10 @@ PrefabInstance:
       value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 7911120275844038501, guid: a02190c444d2a7849bf439486e5beb0a, type: 3}
+      propertyPath: lasers.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7911120275844038501, guid: a02190c444d2a7849bf439486e5beb0a, type: 3}
       propertyPath: yRange
       value: 7
       objectReference: {fileID: 0}
@@ -621,5 +643,13 @@ PrefabInstance:
       propertyPath: pitchMultiplier
       value: -10
       objectReference: {fileID: 0}
+    - target: {fileID: 7911120275844038501, guid: a02190c444d2a7849bf439486e5beb0a, type: 3}
+      propertyPath: lasers.Array.data[0]
+      value: 
+      objectReference: {fileID: 25242429}
+    - target: {fileID: 7911120275844038501, guid: a02190c444d2a7849bf439486e5beb0a, type: 3}
+      propertyPath: lasers.Array.data[1]
+      value: 
+      objectReference: {fileID: 381028596}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a02190c444d2a7849bf439486e5beb0a, type: 3}
