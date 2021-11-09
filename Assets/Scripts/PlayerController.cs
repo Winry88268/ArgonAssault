@@ -4,26 +4,27 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] float moveMultiplier = 30f;
-    [SerializeField] float xRange = 14f;
-    [SerializeField] float yRange = 7f;
-    
-    [SerializeField] float pitchFactor = -2f;
-    [SerializeField] float pitchMultiplier = -10f;
-    [SerializeField] float yawFactor = 2.5f;
-    [SerializeField] float rollMultiplier = -30f;
+    [Header("Generic Setup Settings")]
+    [Tooltip("Horitontal and Vertical move speed")] [SerializeField] float moveMultiplier = 30f;
+    [Tooltip("Bounding for Horizontal movement")] [SerializeField] float xRange = 14f;
+    [Tooltip("Bounding for Vertical movement")] [SerializeField] float yRange = 7f;
 
-    [SerializeField] GameObject[] lasers;
+    [Header("Laser Array")]    
+    [Tooltip("Grouping of Player Laser weaponry")] [SerializeField] GameObject[] lasers;
+    
+    [Header("Collider Array")]
+    [Tooltip("Grouping of Player Ship colliders")] [SerializeField] GameObject[] colliders;
+    
+    [Header("Screen Position Tuning")]
+    [SerializeField] float pitchFactor = -2f;
+    [SerializeField] float yawFactor = 2.5f;
+     
+    [Header("Player Input Tuning")]
+    [SerializeField] float pitchMultiplier = -10f;
+    [SerializeField] float rollMultiplier = -30f;
 
     float xThrow, yThrow;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
     void Update()
     {
         ProcessTranslation();
@@ -31,6 +32,7 @@ public class PlayerController : MonoBehaviour
         ProcessFire();
     }
 
+    // Horizontal and Vertical Translation of the Player
     void ProcessTranslation()
     {
         xThrow = Input.GetAxis("Horizontal");
@@ -47,6 +49,7 @@ public class PlayerController : MonoBehaviour
         transform.localPosition = new Vector3(xClamp, yClamp, transform.localPosition.z);
     }
 
+    // Horizontal and Vertical Rotation of the Player
     void ProcessRotation()
     {
         float positionalPitch = transform.localPosition.y * pitchFactor;
@@ -59,6 +62,7 @@ public class PlayerController : MonoBehaviour
         transform.localRotation = Quaternion.Euler(pitch, yaw, roll);
     }
 
+    // Imma Firin' ma Lazor
     void ProcessFire()
     {
         if (Input.GetButton("Fire1"))
@@ -71,11 +75,13 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    // (De)/Activate Pew Pews
     void LaserFire(bool activity)
     {
         foreach(GameObject i in lasers)
         {
-            i.SetActive(activity);
+            var j = i.GetComponent<ParticleSystem>().emission;
+            j.enabled = activity;
         }
     }
 }
