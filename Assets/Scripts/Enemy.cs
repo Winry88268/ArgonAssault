@@ -11,7 +11,6 @@ public class Enemy : MonoBehaviour
 
     void OnTriggerEnter(Collider other) 
     {
-        Debug.Log($"{other.name}");
         if(other.gameObject.name !="Terrain" || other.gameObject.name !="Enemy")
         {
             Destroy(gameObject);

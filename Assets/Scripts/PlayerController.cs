@@ -12,9 +12,6 @@ public class PlayerController : MonoBehaviour
     [Header("Laser Array")]    
     [Tooltip("Grouping of Player Laser weaponry")] [SerializeField] GameObject[] lasers;
     
-    [Header("Collider Array")]
-    [Tooltip("Grouping of Player Ship colliders")] [SerializeField] GameObject[] colliders;
-    
     [Header("Screen Position Tuning")]
     [SerializeField] float pitchFactor = -2f;
     [SerializeField] float yawFactor = 2.5f;
