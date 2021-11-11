@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
     [Tooltip("Number of Deaths before Game reset")][SerializeField] private int maxLives = 3;
 
     public int curLives { get; set; }
+    public int score { get; set; }
 
     // Sets this script as Persistent on Scene Load
     private void Awake()
@@ -24,5 +25,10 @@ public class GameManager : MonoBehaviour
     void Start() 
     {
         curLives = maxLives;
+    }
+
+    public void IncreaseScore(int killValue) 
+    {
+        score += killValue;
     }
 }
