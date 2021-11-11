@@ -22,6 +22,11 @@ public class PlayerController : MonoBehaviour
 
     float xThrow, yThrow;
 
+    void Start() 
+    {
+        LaserFire(false);
+    }
+
     void Update()
     {
         ProcessTranslation();
@@ -73,7 +78,7 @@ public class PlayerController : MonoBehaviour
     }
 
     // (De)/Activate Pew Pews
-    void LaserFire(bool activity)
+    public void LaserFire(bool activity)
     {
         foreach(GameObject i in lasers)
         {

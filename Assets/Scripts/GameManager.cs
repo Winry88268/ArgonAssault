@@ -15,12 +15,11 @@ public class GameManager : MonoBehaviour
         if (!isCreated)
         {
             DontDestroyOnLoad(this.gameObject);
-            isCreated = true;
-            Init();
+            isCreated = true;   
         }
     }
 
-    public void Init()
+    void Start() 
     {
         curLives = maxLives;
     }

@@ -6,12 +6,15 @@ using UnityEngine.SceneManagement;
 public class CollisionHandler : MonoBehaviour
 {
     [Header("Generic Setup Settings")]
-    [Tooltip("Scene reload delay on Player Death")] [SerializeField] float sceneDelay = 1f;
+    [Tooltip("Scene reload delay on Player Death")] [SerializeField] float sceneDelay = 2f;
     [Tooltip("Player Hits before Destruction")] [SerializeField] int hitPoints = 3;
 
     // Player Prefab has initial Colliders, which are all Grouped here for ease
     [Header("Collider Array")]
     [Tooltip("Grouping of Player Ship colliders")] [SerializeField] GameObject[] colliders;
+    
+    [Header("Explosion FX")]
+    [Tooltip("Particle FX Systems")] [SerializeField] ParticleSystem playerExplosionFX;
     
     GameManager gm;
     PlayerController pc;
@@ -19,6 +22,7 @@ public class CollisionHandler : MonoBehaviour
     
     int currentScene, lives;
     bool isDead = false;
+    bool isEnabled = false;
     
     void Start()
     {
@@ -27,8 +31,21 @@ public class CollisionHandler : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         lives = gm.getLives();
 
-        Debug.Log($"Player Hit Points: {hitPoints}");
-        Debug.Log($"Player Lives: {lives}");
+        pc.enabled = isEnabled;
+    }
+
+    void Update() 
+    {
+        if(!isEnabled)
+        {
+            pc.LaserFire(false);
+        }
+
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            isEnabled = !isEnabled;
+            pc.enabled = isEnabled;
+        }
     }
 
     // If Player hits Enemy or Terrain, reduce Player HitPoints
@@ -43,7 +60,6 @@ public class CollisionHandler : MonoBehaviour
         }
         
         hitPoints--;
-        Debug.Log($"Player Hit Points: {hitPoints}");
 
         if(hitPoints == 0)
         {
@@ -77,10 +93,10 @@ public class CollisionHandler : MonoBehaviour
         }
     }
 
-    // Play Explosion effects
+    // Play Explosion effect
     void DeathExplosion()
     {
-        return;
+        playerExplosionFX.Play();
     }
 
     // Reduce Player Life count, and Reinitialise Scene based on current Life count
@@ -96,7 +112,7 @@ public class CollisionHandler : MonoBehaviour
         {
             currentScene = 0;
             Debug.Log("--GAME OVER--");
-            lives = 3;
+            gm.setLives(3);
         }
         Destroy(gameObject);    
         SceneManager.LoadScene(currentScene);
