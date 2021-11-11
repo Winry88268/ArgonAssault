@@ -17,21 +17,19 @@ public class TimelineManipulator : MonoBehaviour
         PauseGame();
     }
 
+    // On ESC press: if(paused) > Unpause, else Pause
     void Update() 
     {
-        if(pd.playableGraph.GetRootPlayable(0).GetSpeed() == 0)
+        if(Input.GetKeyDown(KeyCode.Escape))
         {
-            if(Input.GetKeyDown(KeyCode.Escape))
+            if (pd.playableGraph.GetRootPlayable(0).GetSpeed() == 0)
             {
                 UnPauseGame();
             }
-        }
-        else
-        {
-            if(Input.GetKeyDown(KeyCode.Escape))
+            else
             {
                 PauseGame();
-            }
+            }              
         }
     }
 
@@ -47,6 +45,7 @@ public class TimelineManipulator : MonoBehaviour
         Debug.Log("=GAME IS UNPAUSED. PRESS ESC TO PAUSE=");
     }
 
+    // Un/Pauses the Timeline
     void PlayAtSpeed(int speed)
     {
         pd.playableGraph.GetRootPlayable(0).SetSpeed(speed);

@@ -22,6 +22,7 @@ public class PlayerController : MonoBehaviour
 
     float xThrow, yThrow;
 
+    // Particle Emitter starts on Awake, so must be disabled before game play begins
     void Start() 
     {
         LaserFire(false);
@@ -64,7 +65,7 @@ public class PlayerController : MonoBehaviour
         transform.localRotation = Quaternion.Euler(pitch, yaw, roll);
     }
 
-    // Imma Firin' ma Lazor
+    // if(shoot is pressed) > shoot, else do not shoot
     void ProcessFire()
     {
         if (Input.GetButton("Fire1"))
@@ -77,7 +78,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // (De)/Activate Pew Pews
+    // De/Activate Laser Particle Emitter
     public void LaserFire(bool activity)
     {
         foreach(GameObject i in lasers)

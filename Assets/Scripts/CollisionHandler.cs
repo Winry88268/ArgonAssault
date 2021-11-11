@@ -24,18 +24,22 @@ public class CollisionHandler : MonoBehaviour
     bool isDead = false;
     bool isEnabled = false;
     
+    // Player Controller must be enabled on start, to prevent Laser Particle emission when game is supposed to be paused
+    // followed by disabling Player Controller to prevent action when game is supposed to be paused
     void Start()
     {
         gm = GameObject.FindObjectOfType<GameManager>();
         pc = GetComponent<PlayerController>();
         rb = GetComponent<Rigidbody>();
-        lives = gm.getLives();
+        lives = gm.curLives;
 
         pc.enabled = isEnabled;
     }
 
+    // if(game is paused) > disable laser particle emitter
+    // if ESC is pressed: invert isEnabled > dis/able Player Controller
     void Update() 
-    {
+    {   
         if(!isEnabled)
         {
             pc.LaserFire(false);
@@ -103,7 +107,7 @@ public class CollisionHandler : MonoBehaviour
     void Reload()
     {
         lives--;
-        gm.setLives(lives);
+        gm.curLives = lives;
         if(lives>0)
         {
             currentScene = SceneManager.GetActiveScene().buildIndex;
@@ -112,7 +116,7 @@ public class CollisionHandler : MonoBehaviour
         {
             currentScene = 0;
             Debug.Log("--GAME OVER--");
-            gm.setLives(3);
+            gm.curLives = lives;
         }
         Destroy(gameObject);    
         SceneManager.LoadScene(currentScene);
