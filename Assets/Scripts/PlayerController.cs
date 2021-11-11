@@ -12,9 +12,6 @@ public class PlayerController : MonoBehaviour
     [Header("Laser Array")]    
     [Tooltip("Grouping of Player Laser weaponry")] [SerializeField] GameObject[] lasers;
     
-    [Header("Collider Array")]
-    [Tooltip("Grouping of Player Ship colliders")] [SerializeField] GameObject[] colliders;
-    
     [Header("Screen Position Tuning")]
     [SerializeField] float pitchFactor = -2f;
     [SerializeField] float yawFactor = 2.5f;
@@ -24,6 +21,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float rollMultiplier = -30f;
 
     float xThrow, yThrow;
+
+    // Particle Emitter starts on Awake, so must be disabled before game play begins
+    void Start() 
+    {
+        LaserFire(false);
+    }
 
     void Update()
     {
@@ -62,7 +65,7 @@ public class PlayerController : MonoBehaviour
         transform.localRotation = Quaternion.Euler(pitch, yaw, roll);
     }
 
-    // Imma Firin' ma Lazor
+    // if(shoot is pressed) > shoot, else do not shoot
     void ProcessFire()
     {
         if (Input.GetButton("Fire1"))
@@ -75,8 +78,8 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // (De)/Activate Pew Pews
-    void LaserFire(bool activity)
+    // De/Activate Laser Particle Emitter
+    public void LaserFire(bool activity)
     {
         foreach(GameObject i in lasers)
         {
