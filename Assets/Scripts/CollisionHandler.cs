@@ -33,6 +33,8 @@ public class CollisionHandler : MonoBehaviour
         lives = gm.curLives;
         hits = gm.maxHits;
         pc.enabled = isEnabled;
+
+        gm.GetCanvas();
     }
 
     // if(game is paused) > disable laser particle emitter

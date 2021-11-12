@@ -9,15 +9,16 @@ public class UI : MonoBehaviour
     [Tooltip("Grouping of UI Health Sprites")] [SerializeField] public Image[] health;
     [Tooltip("Grouping of UI Life Sprites")] [SerializeField] public Image[] life;
 
-    bool isCreated = false;
+    // bool isCreated = false;
 
-    public void ResetHealth() 
-    {
-        foreach(Image h in health)
-        {
-            h.GetComponent<Image>().enabled = true;
-        }
-    }
+    // private void Awake()
+    // {
+    //     if (!isCreated)
+    //     {
+    //         DontDestroyOnLoad(this.gameObject);
+    //         isCreated = true;   
+    //     }
+    // }
 
     public void ReduceHealth(int h)
     {

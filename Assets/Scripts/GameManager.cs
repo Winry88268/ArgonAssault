@@ -26,7 +26,6 @@ public class GameManager : MonoBehaviour
 
     void Start() 
     {
-        canvas = FindObjectOfType<UI>();
         curLives = maxLives;
         curHits = maxHits;
     }
@@ -44,5 +43,19 @@ public class GameManager : MonoBehaviour
     public void ReduceLives(int l)
     {
         canvas.ReduceLives(l);
+    }
+
+    public void GetCanvas()
+    {
+        canvas = FindObjectOfType<UI>();
+        if(curLives<3)
+        {
+            ReduceLives(1);
+        }
+
+        if(curLives<2)
+        {
+            ReduceLives(0);
+        }
     }
 }
