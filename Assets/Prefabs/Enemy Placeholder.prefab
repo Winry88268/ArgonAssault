@@ -110,3 +110,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyExplosionFX: {fileID: 8205374340673788306, guid: 7cf3a35d750801e4cac6cd279d5f095f, type: 3}
   parent: {fileID: 0}
+  scoreValue: 1000

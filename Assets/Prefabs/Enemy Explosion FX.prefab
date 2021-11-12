@@ -4825,4 +4825,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6dd3a4c619579624aa6dfd025faa10d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cleanupDelay: 3
+  cleanupDelay: 2

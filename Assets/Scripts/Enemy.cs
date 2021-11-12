@@ -8,7 +8,17 @@ public class Enemy : MonoBehaviour
     [Tooltip("Enemy FX upon taking Damage")] [SerializeField] GameObject enemyExplosionFX; 
     [Tooltip("Collector for short lifespan Instantiated Game Objects")] [SerializeField] Transform parent;
 
+    [Header("Enemy Variable Settings")]
+    [Tooltip("Score Value for Assigned Enemy")] [SerializeField] int scoreValue;
+    [Tooltip("Enemy Hit Points before Destruction")] [SerializeField] int hitPoints = 1;
+
     GameObject vfx;
+    GameManager gm;
+
+    void Start() 
+    {
+        gm = FindObjectOfType<GameManager>();
+    }
 
     void OnParticleCollision(GameObject other) 
     {
@@ -34,6 +44,17 @@ public class Enemy : MonoBehaviour
     // Destroy this Game Object
     void Contact()
     {
+        hitPoints--;
+        gm.IncreaseScore(scoreValue);
+        if(hitPoints == 0)
+        {
+            Destruction();
+        }
+    }
+
+    void Destruction()
+    {
+        gm.IncreaseScore(scoreValue * 2);
         vfx = Instantiate(enemyExplosionFX, transform.position, Quaternion.identity);
         vfx.transform.parent = parent;
         Destroy(gameObject);

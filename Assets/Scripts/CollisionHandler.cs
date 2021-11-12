@@ -7,7 +7,6 @@ public class CollisionHandler : MonoBehaviour
 {
     [Header("Generic Setup Settings")]
     [Tooltip("Scene reload delay on Player Death")] [SerializeField] float sceneDelay = 2f;
-    [Tooltip("Player Hits before Destruction")] [SerializeField] int hitPoints = 3;
 
     // Player Prefab has initial Colliders, which are all Grouped here for ease
     [Header("Collider Array")]
@@ -20,7 +19,7 @@ public class CollisionHandler : MonoBehaviour
     PlayerController pc;
     Rigidbody rb;
     
-    int currentScene, lives;
+    int currentScene, lives, hits;
     bool isDead = false;
     bool isEnabled = false;
     
@@ -28,11 +27,11 @@ public class CollisionHandler : MonoBehaviour
     // followed by disabling Player Controller to prevent action when game is supposed to be paused
     void Start()
     {
-        gm = GameObject.FindObjectOfType<GameManager>();
+        gm = FindObjectOfType<GameManager>();
         pc = GetComponent<PlayerController>();
         rb = GetComponent<Rigidbody>();
         lives = gm.curLives;
-
+        hits = gm.maxHits;
         pc.enabled = isEnabled;
     }
 
@@ -63,9 +62,14 @@ public class CollisionHandler : MonoBehaviour
             return;
         }
         
-        hitPoints--;
+        hits--;
+        if(hits>=0)
+        {
+            gm.ReduceHealth(hits);
+        }
+        
 
-        if(hitPoints == 0)
+        if(hits == 0)
         {
             pc.enabled = false;
             rb.useGravity = true; 
@@ -110,13 +114,15 @@ public class CollisionHandler : MonoBehaviour
         gm.curLives = lives;
         if(lives>0)
         {
+            gm.ReduceLives(lives-1);
             currentScene = SceneManager.GetActiveScene().buildIndex;
         }
         else
         {
             currentScene = 0;
             Debug.Log("--GAME OVER--");
-            gm.curLives = lives;
+            gm.curLives = gm.maxLives;
+            gm.score = 0;
         }
         Destroy(gameObject);    
         SceneManager.LoadScene(currentScene);
