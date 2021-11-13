@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] public int score = 0;
 
     UI canvas; 
+    TimelineManipulator tm;
 
     // Sets this script as Persistent on Scene Load
     private void Awake()
@@ -31,14 +32,22 @@ public class GameManager : MonoBehaviour
         curHits = maxHits;
     }
 
-    public void getCanvas()
+    public void getHandles()
     {
         canvas = FindObjectOfType<UI>();
+        tm = FindObjectOfType<TimelineManipulator>();
     }
 
     public void IncreaseScore(int killValue) 
     {
         score += killValue;
         canvas.setScore(score);
+    }
+
+    public void isDead()
+    {
+        canvas.GameOverToggle();
+        tm.PauseGame();
+        tm.isDead = true;
     }
 }

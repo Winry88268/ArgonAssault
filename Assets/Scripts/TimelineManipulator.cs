@@ -7,6 +7,8 @@ public class TimelineManipulator : MonoBehaviour
 {
     PlayableDirector pd;
 
+    public bool isDead = false;
+
     void Awake() 
     {
         pd = GetComponent<PlayableDirector>();
@@ -17,7 +19,7 @@ public class TimelineManipulator : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.Space))
         {
-            if (pd.playableGraph.GetRootPlayable(0).GetSpeed() == 0)
+            if (pd.playableGraph.GetRootPlayable(0).GetSpeed() == 0 && !isDead)
             {
                 UnPauseGame();
             }
@@ -28,7 +30,7 @@ public class TimelineManipulator : MonoBehaviour
         }
     }
 
-    void PauseGame()
+    public void PauseGame()
     {
         PlayAtSpeed(0);
     }

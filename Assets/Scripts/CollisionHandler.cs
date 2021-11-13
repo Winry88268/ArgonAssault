@@ -80,6 +80,15 @@ public class CollisionHandler : MonoBehaviour
                 StartCoroutine("immuneFlash");
             }
         }
+
+        if(isDead)
+        {
+            if(Input.GetKeyDown(KeyCode.Escape))
+            {
+                Destroy(gameObject);    
+                SceneManager.LoadScene(currentScene);
+            }
+        }
     }
 
     // If Player hits Enemy or Terrain, reduce Player HitPoints
@@ -183,7 +192,10 @@ public class CollisionHandler : MonoBehaviour
             currentScene = 0;
             gm.curLives = gm.maxLives;
             gm.score = 0;
-            canvas.GameOverToggle();
+            gm.isDead();
+            new WaitForSeconds(sceneDelay);
+            GetComponent<MeshRenderer>().enabled = false;
+            return;
         }
 
         Destroy(gameObject);    

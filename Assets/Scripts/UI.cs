@@ -24,7 +24,7 @@ public class UI : MonoBehaviour
         pauseToggle();
         gm = FindObjectOfType<GameManager>();
 
-        gm.getCanvas();
+        gm.getHandles();
         setScore(gm.score);
 
         GameOverToggle();
@@ -42,18 +42,21 @@ public class UI : MonoBehaviour
 
     public void pauseToggle()
     {   
-        isActive = !isActive;
-        foreach(TextMeshProUGUI i in pause)
+        if(!isDead)
         {
-            if(!isActive)
+            isActive = !isActive;
+            foreach(TextMeshProUGUI i in pause)
             {
-                i.enabled = true;
+                if(!isActive)
+                {
+                    i.enabled = true;
+                }
+                else
+                {
+                    i.enabled = false;
+                }    
             }
-            else
-            {
-                i.enabled = false;
-            }    
-        }
+        }  
     }
 
     public void setScore(int i)
