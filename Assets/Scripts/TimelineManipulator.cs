@@ -12,15 +12,10 @@ public class TimelineManipulator : MonoBehaviour
         pd = GetComponent<PlayableDirector>();
     }
 
-    void Start() 
-    {
-        PauseGame();
-    }
-
     // On ESC press: if(paused) > Unpause, else Pause
     void Update() 
     {
-        if(Input.GetKeyDown(KeyCode.Escape))
+        if(Input.GetKeyDown(KeyCode.Space))
         {
             if (pd.playableGraph.GetRootPlayable(0).GetSpeed() == 0)
             {
@@ -36,13 +31,11 @@ public class TimelineManipulator : MonoBehaviour
     void PauseGame()
     {
         PlayAtSpeed(0);
-        Debug.Log("=GAME IS PAUSED. PRESS ESC TO UNPAUSE=");
     }
 
     void UnPauseGame()
     {
         PlayAtSpeed(1);
-        Debug.Log("=GAME IS UNPAUSED. PRESS ESC TO PAUSE=");
     }
 
     // Un/Pauses the Timeline

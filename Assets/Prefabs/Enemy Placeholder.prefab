@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 2127762094997375428}
   m_Layer: 0
   m_Name: Enemy Placeholder
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -110,4 +110,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyExplosionFX: {fileID: 8205374340673788306, guid: 7cf3a35d750801e4cac6cd279d5f095f, type: 3}
   parent: {fileID: 0}
+  emissionMultiply: 2
   scoreValue: 1000
+  hitPoints: 1

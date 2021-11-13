@@ -7,6 +7,7 @@ public class Enemy : MonoBehaviour
     [Header("System Assignments")]
     [Tooltip("Enemy FX upon taking Damage")] [SerializeField] GameObject enemyExplosionFX; 
     [Tooltip("Collector for short lifespan Instantiated Game Objects")] [SerializeField] Transform parent;
+    [SerializeField] float emissionMultiply = 1f;
 
     [Header("Enemy Variable Settings")]
     [Tooltip("Score Value for Assigned Enemy")] [SerializeField] int scoreValue;
@@ -14,10 +15,24 @@ public class Enemy : MonoBehaviour
 
     GameObject vfx;
     GameManager gm;
+    Material thisMat;
+    Color originalColor;
+    
+    bool isHit = false, isRunning = false;
 
     void Start() 
     {
         gm = FindObjectOfType<GameManager>();
+        thisMat = GetComponent<MeshRenderer>().material;
+        originalColor = thisMat.color;
+    }
+
+    void Update() 
+    {
+        if(!isRunning && isHit)
+            {
+                StartCoroutine("immuneFlash");
+            }
     }
 
     void OnParticleCollision(GameObject other) 
@@ -32,11 +47,23 @@ public class Enemy : MonoBehaviour
     // Do nothing
     void OnTriggerEnter(Collider other) 
     {
-        if(other.gameObject.name !="Terrain" || other.gameObject.name !="Enemy")
+        if(other.gameObject.tag !="Terrain" || other.gameObject.tag !="Enemy")
         {
             Contact();
         }
         else return;
+    }
+
+     public IEnumerator immuneFlash()
+    {
+        isRunning = true;
+        thisMat.color = Color.red;
+        thisMat.SetColor("_EmissionColor", new Vector4(1,0,0,1) * emissionMultiply);     
+        yield return new WaitForSeconds(.1f);
+        GetComponent<MeshRenderer>().material.color = originalColor;
+        isRunning = false;
+        isHit = false;
+        StopCoroutine("immuneFlash");
     }
 
     // Instantiate an instance of the enemy Explosion FX
@@ -44,12 +71,15 @@ public class Enemy : MonoBehaviour
     // Destroy this Game Object
     void Contact()
     {
+        isHit = true;
         hitPoints--;
         gm.IncreaseScore(scoreValue);
         if(hitPoints == 0)
         {
+            GetComponent<SphereCollider>().enabled = false;
             Destruction();
         }
+        
     }
 
     void Destruction()
@@ -57,6 +87,11 @@ public class Enemy : MonoBehaviour
         gm.IncreaseScore(scoreValue * 2);
         vfx = Instantiate(enemyExplosionFX, transform.position, Quaternion.identity);
         vfx.transform.parent = parent;
+        Invoke("Delete", 0.1f);
+    }
+
+    void Delete()
+    {
         Destroy(gameObject);
     }    
 }

@@ -7,6 +7,7 @@ public class CollisionHandler : MonoBehaviour
 {
     [Header("Generic Setup Settings")]
     [Tooltip("Scene reload delay on Player Death")] [SerializeField] float sceneDelay = 2f;
+    [Tooltip("Immunity after collision")] [SerializeField] float damageImmunity = 3f;
 
     // Player Prefab has initial Colliders, which are all Grouped here for ease
     [Header("Collider Array")]
@@ -18,38 +19,66 @@ public class CollisionHandler : MonoBehaviour
     GameManager gm;
     PlayerController pc;
     Rigidbody rb;
-    
+    UI canvas; 
+    Color originalColor;
+    float collisionTime;
+
     int currentScene, lives, hits;
-    bool isDead = false;
-    bool isEnabled = false;
+    // isEnabled tracks if the Player Controls are active
+    // isImmune tracks if the Player is currently Immune to Damage
+    // isRunning tracks if the immuneFlash coroutine is active
+    bool isDead = false, isEnabled = true, isImmune = false, isRunning = false;
+    Color immuneColor = Color.white;
+    
     
     // Player Controller must be enabled on start, to prevent Laser Particle emission when game is supposed to be paused
     // followed by disabling Player Controller to prevent action when game is supposed to be paused
+    // Lastly, checks current lives and modifies UI Images as appropriate
     void Start()
     {
         gm = FindObjectOfType<GameManager>();
         pc = GetComponent<PlayerController>();
         rb = GetComponent<Rigidbody>();
+        canvas = FindObjectOfType<UI>();
+
+        originalColor = GetComponent<Renderer>().material.color;
+
         lives = gm.curLives;
         hits = gm.maxHits;
-        pc.enabled = isEnabled;
+        
+        TogglePause();
 
-        gm.GetCanvas();
+        if(lives<3)
+        {
+            canvas.ReduceLives(1);
+        }
+
+        if(lives<2)
+        {
+            canvas.ReduceLives(0);
+        }
     }
 
     // if(game is paused) > disable laser particle emitter
     // if ESC is pressed: invert isEnabled > dis/able Player Controller
     void Update() 
     {   
-        if(!isEnabled)
+        if(Input.GetKeyDown(KeyCode.Space))
         {
-            pc.LaserFire(false);
+            TogglePause();
         }
 
-        if(Input.GetKeyDown(KeyCode.Escape))
+        if(Time.time - collisionTime > damageImmunity)
         {
-            isEnabled = !isEnabled;
-            pc.enabled = isEnabled;
+            isImmune = false;
+        }   
+
+        if(isImmune && !isDead)
+        {
+            if(!isRunning)
+            {
+                StartCoroutine("immuneFlash");
+            }
         }
     }
 
@@ -57,41 +86,46 @@ public class CollisionHandler : MonoBehaviour
     // If Player HitPoints reaches 0: Prevent Player Movement, 
     //                                Enable Player Gravity, 
     //                                Enable Player Collisions 
-    void OnTriggerEnter(Collider other) 
-    {        
-        if(isDead)
-        { 
-            return;
-        }
-        
-        hits--;
-        if(hits>=0)
-        {
-            gm.ReduceHealth(hits);
-        }
-        
-
-        if(hits == 0)
-        {
-            pc.enabled = false;
-            rb.useGravity = true; 
-
-            DeathRagdoll();
-        }
-    }
-
-    // On Player Death, play Explosion upon further Collisions
-    void OnCollisionEnter(Collision other) 
+    void OnTriggerEnter(Collider other)
     {
         if(isDead)
-        { 
+        {
             return;
         }
+        else if(Time.time - collisionTime < damageImmunity)
+        {
+            return;
+        }   
 
+        Hit();
+    }
+
+    private void Hit()
+    {
+        hits--;
+        if(hits >= 0)
+        {
+            canvas.ReduceHealth(hits);
+            isImmune = true;
+        }
+        if(hits == 0)
+        {
+            Dead();
+        }
+        collisionTime = Time.time;
+    }
+
+    void Dead()
+    {
         isDead = true;
 
+        pc.LaserFire(false);
+        pc.enabled = false;
+        rb.useGravity = true;
+
+        DeathRagdoll();
         DeathExplosion();
-        Invoke("Reload", sceneDelay);        
+        Invoke("Reload", sceneDelay); 
     }
 
     // Switches collision event types on all Player Colliders
@@ -109,23 +143,49 @@ public class CollisionHandler : MonoBehaviour
         playerExplosionFX.Play();
     }
 
+    public IEnumerator immuneFlash()
+    {
+        isRunning = true;
+        GetComponent<MeshRenderer>().enabled = false;     
+        yield return new WaitForSeconds(0.1f);
+        GetComponent<MeshRenderer>().enabled = true;
+        yield return new WaitForSeconds(0.1f);
+        isRunning = false;
+        StopCoroutine("immuneFlash");
+    }
+
+    void TogglePause()
+    {   
+        pc.enabled = isEnabled;
+        isEnabled = !isEnabled;
+        
+        if(isEnabled)
+        {
+            pc.LaserFire(false);
+        }
+
+        canvas.pauseToggle();
+    }
+
     // Reduce Player Life count, and Reinitialise Scene based on current Life count
     void Reload()
     {
         lives--;
         gm.curLives = lives;
+
         if(lives>0)
         {
-            gm.ReduceLives(lives-1);
+            canvas.ReduceLives(lives-1);
             currentScene = SceneManager.GetActiveScene().buildIndex;
         }
         else
         {
             currentScene = 0;
-            Debug.Log("--GAME OVER--");
             gm.curLives = gm.maxLives;
             gm.score = 0;
+            canvas.GameOverToggle();
         }
+
         Destroy(gameObject);    
         SceneManager.LoadScene(currentScene);
     }

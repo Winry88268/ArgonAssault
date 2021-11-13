@@ -8,11 +8,12 @@ public class GameManager : MonoBehaviour
 
     [Header("Persistent Settings")]
     [Tooltip("Player Hits before Destruction")] [SerializeField] public int maxHits = 3;
-    [Tooltip("Maximum Number of Deaths before Game reset")] [SerializeField] public int maxLives = 3;
-    [Tooltip("The UI element")] [SerializeField] public UI canvas;    
+    [Tooltip("Maximum Number of Deaths before Game reset")] [SerializeField] public int maxLives = 3;   
 
     [SerializeField] public int curLives, curHits;
-    [SerializeField] public int score;
+    [SerializeField] public int score = 0;
+
+    UI canvas; 
 
     // Sets this script as Persistent on Scene Load
     private void Awake()
@@ -30,32 +31,14 @@ public class GameManager : MonoBehaviour
         curHits = maxHits;
     }
 
+    public void getCanvas()
+    {
+        canvas = FindObjectOfType<UI>();
+    }
+
     public void IncreaseScore(int killValue) 
     {
         score += killValue;
-    }
-
-    public void ReduceHealth(int h)
-    {
-        canvas.ReduceHealth(h);
-    }
-
-    public void ReduceLives(int l)
-    {
-        canvas.ReduceLives(l);
-    }
-
-    public void GetCanvas()
-    {
-        canvas = FindObjectOfType<UI>();
-        if(curLives<3)
-        {
-            ReduceLives(1);
-        }
-
-        if(curLives<2)
-        {
-            ReduceLives(0);
-        }
+        canvas.setScore(score);
     }
 }

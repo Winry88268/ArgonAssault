@@ -22,12 +22,6 @@ public class PlayerController : MonoBehaviour
 
     float xThrow, yThrow;
 
-    // Particle Emitter starts on Awake, so must be disabled before game play begins
-    void Start() 
-    {
-        LaserFire(false);
-    }
-
     void Update()
     {
         ProcessTranslation();
