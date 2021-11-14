@@ -7,7 +7,7 @@ public class CollisionHandler : MonoBehaviour
 {
     [Header("Generic Setup Settings")]
     [Tooltip("Scene reload delay on Player Death")] [SerializeField] float sceneDelay = 2f;
-    [Tooltip("Immunity after collision")] [SerializeField] float damageImmunity = 3f;
+    [Tooltip("Immunity after collision")] [SerializeField] float damageImmunity = 2.5f;
 
     // Player Prefab has initial Colliders, which are all Grouped here for ease
     [Header("Collider Array")]
@@ -25,12 +25,11 @@ public class CollisionHandler : MonoBehaviour
 
     // isImmune tracks if the Player is currently Immune to Damage
     // isRunning tracks if the immuneFlash coroutine is active    
-    bool isDead = false, isImmune = false, isRunning = false;
+    bool isDead = false, isImmune = false, isRunning = false, gameOver = false;
     int currentScene, lives, hits;  
-    
-    // Player Controller must be enabled on start, to prevent Laser Particle emission when game is supposed to be paused
-    // followed by disabling Player Controller to prevent action when game is supposed to be paused
-    // Lastly, checks current lives and modifies UI Images as appropriate
+
+    // Set Lives and HitPoints from GameManager Persistent Settings
+    // Modifies UI Images as appropriate
     void Start()
     {
         gm = FindObjectOfType<GameManager>();
@@ -54,15 +53,19 @@ public class CollisionHandler : MonoBehaviour
         }
     }
 
-    // if(game is paused) > disable laser particle emitter
-    // if ESC is pressed: invert isEnabled > dis/able Player Controller
+    // If Player Immune, and damageImmunity amount of time has passed, remove Player Immunity
+    // If Player is Immune and is Not Dead: If immuneFLash is not already running, start immuneFlash
+    // If Player gameOver, Restart game on ESC press
     void Update() 
     {   
-        if(Time.time - collisionTime > damageImmunity)
+        if(isImmune)
         {
-            isImmune = false;
-        }   
-
+            if(Time.time - collisionTime > damageImmunity)
+            {
+                isImmune = false;
+            }   
+        }
+        
         if(isImmune && !isDead)
         {
             if(!isRunning)
@@ -71,27 +74,28 @@ public class CollisionHandler : MonoBehaviour
             }
         }
 
-        if(isDead)
+        if(gameOver)
         {
             if(Input.GetKeyDown(KeyCode.Escape))
             {
+
+                gm.curLives = gm.maxLives;
+                gm.score = 0;
                 Destroy(gameObject);    
                 SceneManager.LoadScene(currentScene);
+                Time.timeScale = 1;
             }
         }
     }
 
-    // If Player hits Enemy or Terrain, reduce Player HitPoints
-    // If Player HitPoints reaches 0: Prevent Player Movement, 
-    //                                Enable Player Gravity, 
-    //                                Enable Player Collisions 
+    // If Player is Dead or Immune, ignore Trigger events
     void OnTriggerEnter(Collider other)
     {
         if(isDead)
         {
             return;
         }
-        else if(Time.time - collisionTime < damageImmunity)
+        else if(isImmune)
         {
             return;
         }   
@@ -99,6 +103,8 @@ public class CollisionHandler : MonoBehaviour
         Hit();
     }
 
+    // Reduce Hit Counter and Set Player to Immune
+    // If Player is still Alive: modify UI, If Player is Dead: begin Destruction
     private void Hit()
     {
         hits--;
@@ -115,6 +121,12 @@ public class CollisionHandler : MonoBehaviour
         collisionTime = Time.time;
     }
 
+    // Toggle Player Dead
+    // Disable Player Controls and Lasers
+    // Enable RigidBody Gravity to Allow Ship to Crash
+    // Toggle all Player Colliders to Enable Ship to Rebound on Objects
+    // Start Death Particle Emissions
+    // Begin Reload after sceneDelay
     void Dead()
     {
         isDead = true;
@@ -143,6 +155,9 @@ public class CollisionHandler : MonoBehaviour
         playerExplosionFX.Play();
     }
 
+    // Toggle isRunning to prevent multiple instances of immuneFlash at the same time.
+    // Disable, wait, Enable: Causes the Player to Flash
+    // Wait, isRunning Toggle, StopCorputine: Stops the current instance and allows a new instance to start
     public IEnumerator immuneFlash()
     {
         isRunning = true;
@@ -154,7 +169,9 @@ public class CollisionHandler : MonoBehaviour
         StopCoroutine("immuneFlash");
     }
 
-    // Reduce Player Life count, and Reinitialise Scene based on current Life count
+    // Reduce Player Life count
+    // If Player still has Lives: Modify the UI and Restart Current Scene
+    // If Player has no Lives, Toggle gameOver
     void Reload()
     {
         lives--;
@@ -168,11 +185,10 @@ public class CollisionHandler : MonoBehaviour
         else
         {
             currentScene = 0;
-            gm.curLives = gm.maxLives;
-            gm.score = 0;
             gm.isDead();
             new WaitForSeconds(sceneDelay);
             GetComponent<MeshRenderer>().enabled = false;
+            gameOver = true;
             return;
         }
 

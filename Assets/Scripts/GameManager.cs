@@ -43,6 +43,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    // Collect necessary Handles on other Game Scripts After Scene Load
     public void getHandles()
     {
         canvas = FindObjectOfType<UI>();
@@ -50,17 +51,21 @@ public class GameManager : MonoBehaviour
         nmy = FindObjectOfType<Enemy>();
     }
 
+    // Increase persistent Score and call UI Update
     public void IncreaseScore(float Value) 
     {
         score += Value;
         canvas.setScore(score);
     }
 
+    // Call UI Game Over display and stop all game elements
     public void isDead()
     {
         canvas.GameOverToggle();
+        Time.timeScale = 0;
     }
 
+    // Call Toggle UI Pause display, and Toggle game Un/Pause
     public void TogglePause()
     {
         canvas.pauseToggle();
@@ -75,12 +80,15 @@ public class GameManager : MonoBehaviour
         isPaused = !isPaused;
     }
 
+    // Call UI Laser Power Update
+    // Update Enemy with current Laser Modifier
     public void powerUpdate(float power)
     {
         canvas.LaserPowerUpdate(power);
         nmy.power = power;
     }
 
+    // Call PlayerController for Laser Color Update
     public void laserColor(Color color)
     {
         foreach(GameObject i in pc.lasers)

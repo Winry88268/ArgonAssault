@@ -47,6 +47,7 @@ public class UI : MonoBehaviour
         gm.laserColor(sliderBar.color);
     }
 
+    // Generates a Color Gradient for the Power Bar 
     void generateGradient()
     {
         gradient = new Gradient();
@@ -70,16 +71,20 @@ public class UI : MonoBehaviour
         gradient.SetKeys(colorKeys, alphaKeys);
     }
 
+    // Reduce number of Hearts displayed on UI
     public void ReduceHealth(int h)
     {
         health[h].GetComponent<Image>().enabled = false;
     }
 
+    // Reduce number of Player Ships displayed on UI
     public void ReduceLives(int l)
     {
         life[l].GetComponent<Image>().enabled = false;
     }
 
+    // If Player is Not Dead, Toggle Pause Active
+    // Hide/Display each Pause Text element
     public void pauseToggle()
     {   
         if(!isDead)
@@ -99,11 +104,14 @@ public class UI : MonoBehaviour
         }  
     }
 
+    // Update the Score on the UI
     public void setScore(float i)
     {
         scoreCounter.text = i.ToString("N0");
     }
 
+    // Toggle Player Dead
+    // Hide/Display each Game Over Text element
     public void GameOverToggle()
     {   
         isDead = !isDead;
@@ -120,6 +128,7 @@ public class UI : MonoBehaviour
         }  
     }
 
+    // Update UI Slider to reflect Laser Power level
     public void LaserPowerUpdate(float powerValue)
     {
         slider.value = powerValue;
