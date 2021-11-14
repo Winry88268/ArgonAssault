@@ -14,7 +14,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] public int score = 0;
 
     UI canvas;
-    LaserPower lp;
 
     public bool isPaused = false;
 
@@ -45,7 +44,6 @@ public class GameManager : MonoBehaviour
     public void getHandles()
     {
         canvas = FindObjectOfType<UI>();
-        lp = FindObjectOfType<LaserPower>();
     }
 
     public void IncreaseScore(int killValue) 
