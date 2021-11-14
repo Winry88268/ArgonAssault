@@ -99,9 +99,9 @@ public class UI : MonoBehaviour
         }  
     }
 
-    public void setScore(int i)
+    public void setScore(float i)
     {
-        scoreCounter.text = i.ToString();
+        scoreCounter.text = i.ToString("N0");
     }
 
     public void GameOverToggle()

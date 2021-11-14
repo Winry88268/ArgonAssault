@@ -10,32 +10,30 @@ public class Enemy : MonoBehaviour
     [SerializeField] float emissionMultiply = 1f;
 
     [Header("Enemy Variable Settings")]
-    [Tooltip("Enemy Hit Points before Destruction")] [SerializeField] int hitPoints = 1;
-    [Tooltip("Point Value for Hitting Enemy")] [SerializeField] int hitValue;
+    [Tooltip("Enemy Hit Points before Destruction")] [SerializeField] float hitPoints = 1f;
+    [Tooltip("Point Value for Hitting Enemy")] [SerializeField] float hitValue;
     [Tooltip("Point Value for Killing Enemy")] [SerializeField] int deathValue;
 
     GameObject vfx;
-    //GameObject[] Player;
     GameManager gm;
     Material thisMat;
     Color originalColor;
     
     bool isHit = false, isRunning = false;
+    public float power = 1f;
 
     void Start() 
     {
         gm = FindObjectOfType<GameManager>();
         thisMat = GetComponent<MeshRenderer>().material;
         originalColor = thisMat.color;
-
-        //Player = GameObject.FindGameObjectsWithTag("Player");
     }
 
     void Update() 
     {
         if(!isRunning && isHit)
             {
-                StartCoroutine("immuneFlash");
+                StartCoroutine("HitFlash");
             }
     }
 
@@ -61,7 +59,7 @@ public class Enemy : MonoBehaviour
         else return;
     }
 
-     public IEnumerator immuneFlash()
+     public IEnumerator HitFlash()
     {
         isRunning = true;
         thisMat.color = Color.red;
@@ -79,9 +77,9 @@ public class Enemy : MonoBehaviour
     void Contact()
     {
         isHit = true;
-        hitPoints--;
-        gm.IncreaseScore(hitValue);
-        if(hitPoints < 1)
+        hitPoints -= Mathf.Clamp((power), 0f, 1f);
+        gm.IncreaseScore(hitValue * power);
+        if(hitPoints < 0)
         {
             GetComponent<SphereCollider>().enabled = false;
             Destruction();

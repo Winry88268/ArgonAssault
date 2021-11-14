@@ -11,8 +11,8 @@ public class PlayerController : MonoBehaviour
 
     [Header("Laser Array")]    
     [Tooltip("Grouping of Player Laser weaponry")] [SerializeField] public GameObject[] lasers;
-    [Tooltip("Maximum Laser Power")] [SerializeField] float laserPower = 10000f;
-    [Tooltip("Laser Power Regen per Update")] [SerializeField] float laserRegen = 5f;
+    [Tooltip("Maximum Laser Power")] [SerializeField] float currLaserPower = 10000f;
+    [Tooltip("Laser Power Regen per Update")] [SerializeField] float laserRegen = 25f;
     [Tooltip("Laser Power Drain per Update")] [SerializeField] float laserDrain = 10f;
 
     [Header("Screen Position Tuning")]
@@ -25,7 +25,8 @@ public class PlayerController : MonoBehaviour
 
     GameManager gm;
 
-    float xThrow, yThrow, power;
+    public float power = 100f;
+    float xThrow, yThrow;
     bool isFiring = false;
 
     void Start() 
@@ -47,16 +48,16 @@ public class PlayerController : MonoBehaviour
     // Laser Power Modification
     void laserUpdate()
     {
-        if(isFiring && laserPower >= laserDrain)
+        if(isFiring && currLaserPower >= laserDrain)
         {
-            laserPower = Mathf.Clamp((laserPower - laserDrain), 0f, 10000f);
+            currLaserPower = Mathf.Clamp((currLaserPower - laserDrain), 0f, 10000f);
         }
         else
         {
-            laserPower = Mathf.Clamp((laserPower + laserRegen), 0f, 10000f);
+            currLaserPower = Mathf.Clamp((currLaserPower + laserRegen), 0f, 10000f);
         }
 
-        power = laserPower/10000f;
+        power = currLaserPower/10000f;
         gm.powerUpdate(power);
     }
 
@@ -93,7 +94,7 @@ public class PlayerController : MonoBehaviour
     // if(shoot is pressed) > shoot, else do not shoot
     void ProcessFire()
     {
-        if (Input.GetButton("Fire1") && laserPower > laserDrain)
+        if (Input.GetButton("Fire1") && currLaserPower > laserDrain)
         {
             LaserFire(true);
             isFiring = true;

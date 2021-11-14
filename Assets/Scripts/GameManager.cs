@@ -11,10 +11,11 @@ public class GameManager : MonoBehaviour
     [Tooltip("Maximum Number of Deaths before Game reset")] [SerializeField] public int maxLives = 3;   
 
     [SerializeField] public int curLives, curHits;
-    [SerializeField] public int score = 0;
+    [SerializeField] public float score = 0;
 
     UI canvas;
     PlayerController pc;
+    Enemy nmy;
 
     public bool isPaused = false;
 
@@ -46,11 +47,12 @@ public class GameManager : MonoBehaviour
     {
         canvas = FindObjectOfType<UI>();
         pc = FindObjectOfType<PlayerController>();
+        nmy = FindObjectOfType<Enemy>();
     }
 
-    public void IncreaseScore(int killValue) 
+    public void IncreaseScore(float Value) 
     {
-        score += killValue;
+        score += Value;
         canvas.setScore(score);
     }
 
@@ -76,6 +78,7 @@ public class GameManager : MonoBehaviour
     public void powerUpdate(float power)
     {
         canvas.LaserPowerUpdate(power);
+        nmy.power = power;
     }
 
     public void laserColor(Color color)
