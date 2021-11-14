@@ -13,21 +13,60 @@ public class UI : MonoBehaviour
     [Tooltip("Grouping of Game Over texts")] [SerializeField] public TextMeshProUGUI[] over;
 
     [Tooltip("Score Text")] [SerializeField] TextMeshProUGUI scoreCounter;
-    
-    // is PAUSE currently active
-    bool isActive = true, isDead = true;
-
+    [SerializeField] Slider slider;
+    [SerializeField] Image sliderBar;
+    Gradient gradient;
+    GradientColorKey[] colorKeys;
+    GradientAlphaKey[] alphaKeys;
+    RectTransform rt;
     GameManager gm;
+
+    // is PAUSE currently active (Inverts on Start)
+    // is the Player Dead (Inverts on Start)
+    bool isActive = true, isDead = true;
+    float sliderMax;
 
     void Start() 
     {
+        generateGradient();
+
+        GameOverToggle();
         pauseToggle();
+
+        rt = slider.GetComponent<RectTransform>();
         gm = FindObjectOfType<GameManager>();
 
         gm.getHandles();
         setScore(gm.score);
+        slider.value = 1f;  
+    }
 
-        GameOverToggle();
+    void Update() 
+    {
+        sliderBar.color = gradient.Evaluate(slider.value);
+    }
+
+    void generateGradient()
+    {
+        gradient = new Gradient();
+
+        colorKeys = new GradientColorKey[3];
+        colorKeys[0].color = Color.red;
+        colorKeys[0].time = 0.0f;
+        colorKeys[1].color = Color.yellow;
+        colorKeys[1].time = 0.5f;
+        colorKeys[2].color = Color.green;
+        colorKeys[2].time = 1.0f;
+
+        alphaKeys = new GradientAlphaKey[3];
+        alphaKeys[0].alpha = 1.0f;
+        alphaKeys[0].time = 0.0f;
+        alphaKeys[1].alpha = 1.0f;
+        alphaKeys[1].time = 0.5f;
+        alphaKeys[2].alpha = 1.0f;
+        alphaKeys[2].time = 1.0f;
+
+        gradient.SetKeys(colorKeys, alphaKeys);
     }
 
     public void ReduceHealth(int h)
@@ -49,11 +88,11 @@ public class UI : MonoBehaviour
             {
                 if(!isActive)
                 {
-                    i.enabled = true;
+                    i.enabled = false;
                 }
                 else
                 {
-                    i.enabled = false;
+                    i.enabled = true;
                 }    
             }
         }  
@@ -78,5 +117,10 @@ public class UI : MonoBehaviour
                 i.enabled = false;
             }
         }  
+    }
+
+    public void LaserPowerUpdate(float powerValue)
+    {
+        slider.value = powerValue;
     }
 }

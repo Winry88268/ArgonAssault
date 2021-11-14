@@ -20,16 +20,13 @@ public class CollisionHandler : MonoBehaviour
     PlayerController pc;
     Rigidbody rb;
     UI canvas; 
-    Color originalColor;
+    Color originalColor, immuneColor = Color.white;
     float collisionTime;
 
-    int currentScene, lives, hits;
-    // isEnabled tracks if the Player Controls are active
     // isImmune tracks if the Player is currently Immune to Damage
-    // isRunning tracks if the immuneFlash coroutine is active
-    bool isDead = false, isEnabled = true, isImmune = false, isRunning = false;
-    Color immuneColor = Color.white;
-    
+    // isRunning tracks if the immuneFlash coroutine is active    
+    bool isDead = false, isImmune = false, isRunning = false;
+    int currentScene, lives, hits;  
     
     // Player Controller must be enabled on start, to prevent Laser Particle emission when game is supposed to be paused
     // followed by disabling Player Controller to prevent action when game is supposed to be paused
@@ -46,8 +43,6 @@ public class CollisionHandler : MonoBehaviour
         lives = gm.curLives;
         hits = gm.maxHits;
         
-        TogglePause();
-
         if(lives<3)
         {
             canvas.ReduceLives(1);
@@ -63,11 +58,6 @@ public class CollisionHandler : MonoBehaviour
     // if ESC is pressed: invert isEnabled > dis/able Player Controller
     void Update() 
     {   
-        if(Input.GetKeyDown(KeyCode.Space))
-        {
-            TogglePause();
-        }
-
         if(Time.time - collisionTime > damageImmunity)
         {
             isImmune = false;
@@ -112,12 +102,13 @@ public class CollisionHandler : MonoBehaviour
     private void Hit()
     {
         hits--;
+        isImmune = true;
+        
         if(hits >= 0)
         {
             canvas.ReduceHealth(hits);
-            isImmune = true;
         }
-        if(hits == 0)
+        if(hits < 1)
         {
             Dead();
         }
@@ -161,19 +152,6 @@ public class CollisionHandler : MonoBehaviour
         yield return new WaitForSeconds(0.1f);
         isRunning = false;
         StopCoroutine("immuneFlash");
-    }
-
-    void TogglePause()
-    {   
-        pc.enabled = isEnabled;
-        isEnabled = !isEnabled;
-        
-        if(isEnabled)
-        {
-            pc.LaserFire(false);
-        }
-
-        canvas.pauseToggle();
     }
 
     // Reduce Player Life count, and Reinitialise Scene based on current Life count

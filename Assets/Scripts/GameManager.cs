@@ -13,8 +13,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] public int curLives, curHits;
     [SerializeField] public int score = 0;
 
-    UI canvas; 
-    TimelineManipulator tm;
+    UI canvas;
+    LaserPower lp;
+
+    public bool isPaused = false;
 
     // Sets this script as Persistent on Scene Load
     private void Awake()
@@ -32,10 +34,18 @@ public class GameManager : MonoBehaviour
         curHits = maxHits;
     }
 
+    void Update() 
+    {
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+            TogglePause();
+        }
+    }
+
     public void getHandles()
     {
         canvas = FindObjectOfType<UI>();
-        tm = FindObjectOfType<TimelineManipulator>();
+        lp = FindObjectOfType<LaserPower>();
     }
 
     public void IncreaseScore(int killValue) 
@@ -47,7 +57,24 @@ public class GameManager : MonoBehaviour
     public void isDead()
     {
         canvas.GameOverToggle();
-        tm.PauseGame();
-        tm.isDead = true;
+    }
+
+    public void TogglePause()
+    {
+        canvas.pauseToggle();
+        if(isPaused)
+        {
+            Time.timeScale = 1;
+        }
+        else
+        {
+            Time.timeScale = 0;
+        }
+        isPaused = !isPaused;
+    }
+
+    public void powerUpdate(float power)
+    {
+        canvas.LaserPowerUpdate(power);
     }
 }

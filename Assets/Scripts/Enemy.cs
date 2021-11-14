@@ -10,10 +10,12 @@ public class Enemy : MonoBehaviour
     [SerializeField] float emissionMultiply = 1f;
 
     [Header("Enemy Variable Settings")]
-    [Tooltip("Score Value for Assigned Enemy")] [SerializeField] int scoreValue;
     [Tooltip("Enemy Hit Points before Destruction")] [SerializeField] int hitPoints = 1;
+    [Tooltip("Point Value for Hitting Enemy")] [SerializeField] int hitValue;
+    [Tooltip("Point Value for Killing Enemy")] [SerializeField] int deathValue;
 
     GameObject vfx;
+    //GameObject[] Player;
     GameManager gm;
     Material thisMat;
     Color originalColor;
@@ -25,6 +27,8 @@ public class Enemy : MonoBehaviour
         gm = FindObjectOfType<GameManager>();
         thisMat = GetComponent<MeshRenderer>().material;
         originalColor = thisMat.color;
+
+        //Player = GameObject.FindGameObjectsWithTag("Player");
     }
 
     void Update() 
@@ -37,7 +41,10 @@ public class Enemy : MonoBehaviour
 
     void OnParticleCollision(GameObject other) 
     {
-        Contact();
+        if(gameObject.tag != "Projectile")
+        {
+            Contact();
+        }    
     }
 
     // If enemy collides with a GameObject that is not Terrain or another Enemy
@@ -73,8 +80,8 @@ public class Enemy : MonoBehaviour
     {
         isHit = true;
         hitPoints--;
-        gm.IncreaseScore(scoreValue);
-        if(hitPoints == 0)
+        gm.IncreaseScore(hitValue);
+        if(hitPoints < 1)
         {
             GetComponent<SphereCollider>().enabled = false;
             Destruction();
@@ -84,7 +91,7 @@ public class Enemy : MonoBehaviour
 
     void Destruction()
     {
-        gm.IncreaseScore(scoreValue * 2);
+        gm.IncreaseScore(deathValue);
         vfx = Instantiate(enemyExplosionFX, transform.position, Quaternion.identity);
         vfx.transform.parent = parent;
         Invoke("Delete", 0.1f);

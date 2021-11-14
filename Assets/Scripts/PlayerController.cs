@@ -11,7 +11,10 @@ public class PlayerController : MonoBehaviour
 
     [Header("Laser Array")]    
     [Tooltip("Grouping of Player Laser weaponry")] [SerializeField] GameObject[] lasers;
-    
+    [Tooltip("Maximum Laser Power")] [SerializeField] float laserPower = 10000f;
+    [Tooltip("Laser Power Regen per Update")] [SerializeField] float laserRegen = 5f;
+    [Tooltip("Laser Power Drain per Update")] [SerializeField] float laserDrain = 10f;
+
     [Header("Screen Position Tuning")]
     [SerializeField] float pitchFactor = -2f;
     [SerializeField] float yawFactor = 2.5f;
@@ -20,13 +23,41 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float pitchMultiplier = -10f;
     [SerializeField] float rollMultiplier = -30f;
 
-    float xThrow, yThrow;
+    GameManager gm;
+
+    float xThrow, yThrow, power;
+    bool isFiring = false;
+
+    void Start() 
+    {
+        gm = FindObjectOfType<GameManager>();
+    }
 
     void Update()
     {
-        ProcessTranslation();
-        ProcessRotation();
-        ProcessFire();
+        if(!gm.isPaused)
+        {
+            laserUpdate();
+            ProcessTranslation();
+            ProcessRotation();
+            ProcessFire();
+        }  
+    }
+
+    // Laser Power Modification
+    void laserUpdate()
+    {
+        if(isFiring && laserPower >= laserDrain)
+        {
+            laserPower = Mathf.Clamp((laserPower - laserDrain), 0f, 10000f);
+        }
+        else
+        {
+            laserPower = Mathf.Clamp((laserPower + laserRegen), 0f, 10000f);
+        }
+
+        power = laserPower/10000f;
+        gm.powerUpdate(power);
     }
 
     // Horizontal and Vertical Translation of the Player
@@ -62,13 +93,15 @@ public class PlayerController : MonoBehaviour
     // if(shoot is pressed) > shoot, else do not shoot
     void ProcessFire()
     {
-        if (Input.GetButton("Fire1"))
+        if (Input.GetButton("Fire1") && laserPower > laserDrain)
         {
             LaserFire(true);
+            isFiring = true;
         }
         else
         {
             LaserFire(false);
+            isFiring = false;
         }
     }
 
