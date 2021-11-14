@@ -10,7 +10,7 @@ public class PlayerController : MonoBehaviour
     [Tooltip("Bounding for Vertical movement")] [SerializeField] float yRange = 7f;
 
     [Header("Laser Array")]    
-    [Tooltip("Grouping of Player Laser weaponry")] [SerializeField] GameObject[] lasers;
+    [Tooltip("Grouping of Player Laser weaponry")] [SerializeField] public GameObject[] lasers;
     [Tooltip("Maximum Laser Power")] [SerializeField] float laserPower = 10000f;
     [Tooltip("Laser Power Regen per Update")] [SerializeField] float laserRegen = 5f;
     [Tooltip("Laser Power Drain per Update")] [SerializeField] float laserDrain = 10f;

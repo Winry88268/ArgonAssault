@@ -44,6 +44,7 @@ public class UI : MonoBehaviour
     void Update() 
     {
         sliderBar.color = gradient.Evaluate(slider.value);
+        gm.laserColor(sliderBar.color);
     }
 
     void generateGradient()

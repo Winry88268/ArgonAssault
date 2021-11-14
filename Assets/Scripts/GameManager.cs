@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] public int score = 0;
 
     UI canvas;
+    PlayerController pc;
 
     public bool isPaused = false;
 
@@ -44,6 +45,7 @@ public class GameManager : MonoBehaviour
     public void getHandles()
     {
         canvas = FindObjectOfType<UI>();
+        pc = FindObjectOfType<PlayerController>();
     }
 
     public void IncreaseScore(int killValue) 
@@ -74,5 +76,14 @@ public class GameManager : MonoBehaviour
     public void powerUpdate(float power)
     {
         canvas.LaserPowerUpdate(power);
+    }
+
+    public void laserColor(Color color)
+    {
+        foreach(GameObject i in pc.lasers)
+        {
+            ParticleSystem.MainModule j = i.GetComponent<ParticleSystem>().main;
+            j.startColor = new ParticleSystem.MinMaxGradient(color);
+        }
     }
 }
