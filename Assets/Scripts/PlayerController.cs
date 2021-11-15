@@ -10,8 +10,11 @@ public class PlayerController : MonoBehaviour
     [Tooltip("Bounding for Vertical movement")] [SerializeField] float yRange = 7f;
 
     [Header("Laser Array")]    
-    [Tooltip("Grouping of Player Laser weaponry")] [SerializeField] GameObject[] lasers;
-    
+    [Tooltip("Grouping of Player Laser weaponry")] [SerializeField] public GameObject[] lasers;
+    [Tooltip("Maximum Laser Power")] [SerializeField] float currLaserPower = 10000f;
+    [Tooltip("Laser Power Regen per Update")] [SerializeField] float laserRegen = 25f;
+    [Tooltip("Laser Power Drain per Update")] [SerializeField] float laserDrain = 10f;
+
     [Header("Screen Position Tuning")]
     [SerializeField] float pitchFactor = -2f;
     [SerializeField] float yawFactor = 2.5f;
@@ -20,19 +23,42 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float pitchMultiplier = -10f;
     [SerializeField] float rollMultiplier = -30f;
 
-    float xThrow, yThrow;
+    GameManager gm;
 
-    // Particle Emitter starts on Awake, so must be disabled before game play begins
+    public float power = 100f;
+    float xThrow, yThrow;
+    bool isFiring = false;
+
     void Start() 
     {
-        LaserFire(false);
+        gm = FindObjectOfType<GameManager>();
     }
 
     void Update()
     {
-        ProcessTranslation();
-        ProcessRotation();
-        ProcessFire();
+        if(!gm.isPaused)
+        {
+            laserUpdate();
+            ProcessTranslation();
+            ProcessRotation();
+            ProcessFire();
+        }  
+    }
+
+    // Laser Power Modification
+    void laserUpdate()
+    {
+        if(isFiring && currLaserPower >= laserDrain)
+        {
+            currLaserPower = Mathf.Clamp((currLaserPower - laserDrain), 0f, 10000f);
+        }
+        else
+        {
+            currLaserPower = Mathf.Clamp((currLaserPower + laserRegen), 0f, 10000f);
+        }
+
+        power = currLaserPower/10000f;
+        gm.powerUpdate(power);
     }
 
     // Horizontal and Vertical Translation of the Player
@@ -68,13 +94,15 @@ public class PlayerController : MonoBehaviour
     // if(shoot is pressed) > shoot, else do not shoot
     void ProcessFire()
     {
-        if (Input.GetButton("Fire1"))
+        if (Input.GetButton("Fire1") && currLaserPower > laserDrain)
         {
             LaserFire(true);
+            isFiring = true;
         }
         else
         {
             LaserFire(false);
+            isFiring = false;
         }
     }
 
