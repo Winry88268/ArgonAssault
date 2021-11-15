@@ -67,6 +67,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Flying Insect - Standard
       objectReference: {fileID: 0}
+    - target: {fileID: 4483912794952953626, guid: 30eeec8683198654eb5f94a93b4997b0, type: 3}
+      propertyPath: m_TagString
+      value: Enemy
+      objectReference: {fileID: 0}
     - target: {fileID: 4497097420377922406, guid: 30eeec8683198654eb5f94a93b4997b0, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -99,5 +103,6 @@ PrefabInstance:
       propertyPath: deathValue
       value: 1000
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 2829159401263701167, guid: 30eeec8683198654eb5f94a93b4997b0, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 30eeec8683198654eb5f94a93b4997b0, type: 3}

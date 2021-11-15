@@ -11,6 +11,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Flying Insect - Miniboss
       objectReference: {fileID: 0}
+    - target: {fileID: 2603711074231367958, guid: b9d76fc2f32339c42a58984386422016, type: 3}
+      propertyPath: m_TagString
+      value: Enemy
+      objectReference: {fileID: 0}
     - target: {fileID: 2608898615533156242, guid: b9d76fc2f32339c42a58984386422016, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -99,5 +103,6 @@ PrefabInstance:
       propertyPath: hitValue
       value: 2000
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 4421130753618201251, guid: b9d76fc2f32339c42a58984386422016, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: b9d76fc2f32339c42a58984386422016, type: 3}

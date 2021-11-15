@@ -266,7 +266,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 1, g: 1, b: 0.3254902, a: 1}
+      maxColor: {r: 0, g: 0, b: 0, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -3862,17 +3862,17 @@ ParticleSystem:
       properties: 0
       emitProbability: 1
   LightsModule:
-    enabled: 0
-    ratio: 0
-    light: {fileID: 0}
+    enabled: 1
+    ratio: 1
+    light: {fileID: 9193769652993263864, guid: 59ef29797b26aeb45846518f74de91a1, type: 3}
     randomDistribution: 1
     color: 1
-    range: 1
+    range: 0
     intensity: 1
     rangeCurve:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1
+      scalar: 5
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -3925,7 +3925,7 @@ ParticleSystem:
     intensityCurve:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1
+      scalar: 15
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -4868,6 +4868,7 @@ GameObject:
   - component: {fileID: 5186900157203250535}
   - component: {fileID: 5186900157203250528}
   - component: {fileID: 5186900157203250529}
+  - component: {fileID: 2678662048030674310}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -4940,6 +4941,66 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5186900157203250530}
   m_Enabled: 0
+--- !u!114 &2678662048030674310
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5186900157203250530}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 948f4100a11a5c24981795d21301da5c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  volumeTrigger: {fileID: 5186900157203250535}
+  volumeLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  stopNaNPropagation: 1
+  finalBlitToCameraTarget: 0
+  antialiasingMode: 1
+  temporalAntialiasing:
+    jitterSpread: 0.75
+    sharpness: 0.25
+    stationaryBlending: 0.95
+    motionBlending: 0.85
+  subpixelMorphologicalAntialiasing:
+    quality: 2
+  fastApproximateAntialiasing:
+    fastMode: 1
+    keepAlpha: 0
+  fog:
+    enabled: 1
+    excludeSkybox: 1
+  debugLayer:
+    lightMeter:
+      width: 512
+      height: 256
+      showCurves: 1
+    histogram:
+      width: 512
+      height: 256
+      channel: 3
+    waveform:
+      exposure: 0.12
+      height: 256
+    vectorscope:
+      size: 256
+      exposure: 0.12
+    overlaySettings:
+      linearDepth: 0
+      motionColorIntensity: 4
+      motionGridSize: 64
+      colorBlindnessType: 0
+      colorBlindnessStrength: 1
+  m_Resources: {fileID: 11400000, guid: d82512f9c8e5d4a4d938b575d47f88d4, type: 2}
+  m_ShowToolkit: 0
+  m_ShowCustomSorter: 0
+  breakBeforeColorGrading: 0
+  m_BeforeTransparentBundles: []
+  m_BeforeStackBundles: []
+  m_AfterStackBundles: []
 --- !u!1 &5186900157567338135
 GameObject:
   m_ObjectHideFlags: 0
@@ -4986,7 +5047,7 @@ GameObject:
   - component: {fileID: 5186900157806045531}
   - component: {fileID: 5186900157806045530}
   m_Layer: 0
-  m_Name: Player Rig 1
+  m_Name: Player Rig
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5296,8 +5357,8 @@ ParticleSystem:
       maxColor: {r: 1, g: 1, b: 0.36862746, a: 1}
       maxGradient:
         serializedVersion: 2
-        key0: {r: 1, g: 1, b: 0.8941177, a: 1}
-        key1: {r: 0.94117653, g: 0.6627451, b: 0.23137257, a: 1}
+        key0: {r: 0.9568628, g: 0.95294124, b: 0.882353, a: 1}
+        key1: {r: 0.9921569, g: 0.96470594, b: 0.59607846, a: 0.78431374}
         key2: {r: 0.9921569, g: 0.8745099, b: 0.37254903, a: 0.39215687}
         key3: {r: 0.8745099, g: 0.3529412, b: 0, a: 0}
         key4: {r: 0.5058824, g: 0.1764706, b: 0, a: 0}
@@ -5305,15 +5366,15 @@ ParticleSystem:
         key6: {r: 0, g: 0, b: 0, a: 0}
         key7: {r: 0, g: 0, b: 0, a: 0}
         ctime0: 0
-        ctime1: 65535
+        ctime1: 16384
         ctime2: 32768
         ctime3: 49151
         ctime4: 65535
         ctime5: 0
         ctime6: 0
         ctime7: 0
-        atime0: 0
-        atime1: 65535
+        atime0: 964
+        atime1: 32768
         atime2: 65535
         atime3: 0
         atime4: 0
@@ -5321,8 +5382,8 @@ ParticleSystem:
         atime6: 0
         atime7: 0
         m_Mode: 0
-        m_NumColorKeys: 2
-        m_NumAlphaKeys: 2
+        m_NumColorKeys: 5
+        m_NumAlphaKeys: 3
       minGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -10089,7 +10150,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneDelay: 2
-  terrainImmunity: 1
+  damageImmunity: 2.5
   colliders:
   - {fileID: 5186900156614736875}
   - {fileID: 5186900158144634249}
@@ -10109,16 +10170,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ce8fe3b25633ab49aa461f7eaf1edfc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveMultiplier: 30
+  moveMultiplier: 20
   xRange: 14
   yRange: 7
   lasers:
   - {fileID: 5186900156765211566}
   - {fileID: 5186900158380353906}
+  currLaserPower: 10000
+  laserRegen: 25
+  laserDrain: 10
   pitchFactor: -2
   yawFactor: 2.5
   pitchMultiplier: -10
   rollMultiplier: -30
+  power: 100
 --- !u!1 &5186900158380353906
 GameObject:
   m_ObjectHideFlags: 0
@@ -10341,7 +10406,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 1, g: 1, b: 0.3254902, a: 1}
+      maxColor: {r: 0, g: 0, b: 0, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -13937,17 +14002,17 @@ ParticleSystem:
       properties: 0
       emitProbability: 1
   LightsModule:
-    enabled: 0
-    ratio: 0
-    light: {fileID: 0}
+    enabled: 1
+    ratio: 1
+    light: {fileID: 9193769652993263864, guid: 59ef29797b26aeb45846518f74de91a1, type: 3}
     randomDistribution: 1
     color: 1
-    range: 1
+    range: 0
     intensity: 1
     rangeCurve:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1
+      scalar: 5
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -14000,7 +14065,7 @@ ParticleSystem:
     intensityCurve:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1
+      scalar: 15
       minScalar: 1
       maxCurve:
         serializedVersion: 2

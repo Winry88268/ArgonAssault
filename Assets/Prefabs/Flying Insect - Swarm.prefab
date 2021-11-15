@@ -17,7 +17,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -2722309111935097343, guid: 6807a4fbab15c3444aa44ff82bcbe872, type: 3}
       propertyPath: deathValue
-      value: 500
+      value: 250
       objectReference: {fileID: 0}
     - target: {fileID: 1724874857677222, guid: 6807a4fbab15c3444aa44ff82bcbe872, type: 3}
       propertyPath: m_Name

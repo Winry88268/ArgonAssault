@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour
 
     UI canvas;
     PlayerController pc;
-    Enemy nmy;
+    public List<GameObject> nmy;
 
     public bool isPaused = false;
 
@@ -25,18 +25,16 @@ public class GameManager : MonoBehaviour
         if (!isCreated)
         {
             DontDestroyOnLoad(this.gameObject);
-            isCreated = true;   
-        }
-    }
+            isCreated = true;  
 
-    void Start() 
-    {
-        curLives = maxLives;
-        curHits = maxHits;
+            curLives = maxLives;
+            curHits = maxHits;
+        }
     }
 
     void Update() 
     {
+
         if(Input.GetKeyDown(KeyCode.Space))
         {
             TogglePause();
@@ -48,7 +46,6 @@ public class GameManager : MonoBehaviour
     {
         canvas = FindObjectOfType<UI>();
         pc = FindObjectOfType<PlayerController>();
-        nmy = FindObjectOfType<Enemy>();
     }
 
     // Increase persistent Score and call UI Update
@@ -85,7 +82,13 @@ public class GameManager : MonoBehaviour
     public void powerUpdate(float power)
     {
         canvas.LaserPowerUpdate(power);
-        nmy.power = power;
+        if(nmy != null)
+        {
+            foreach(GameObject i in nmy)
+            {   
+                i.GetComponent<Enemy>().power = power; 
+            }
+        }   
     }
 
     // Call PlayerController for Laser Color Update

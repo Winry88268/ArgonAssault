@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4027333716241026}
-  - component: {fileID: 65788256315675032}
+  - component: {fileID: 4884980904752548932}
   m_Layer: 0
   m_Name: Collider (4)
   m_TagString: Untagged
@@ -31,7 +31,7 @@ Transform:
   m_Father: {fileID: 4704643116404514}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &65788256315675032
+--- !u!65 &4884980904752548932
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -42,8 +42,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 3.4422107, y: 4.307641, z: 5.2912674}
-  m_Center: {x: 0, y: -1.0875955, z: -0.41413307}
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1196979546715134
 GameObject:
   m_ObjectHideFlags: 0
@@ -382,7 +382,7 @@ GameObject:
   - component: {fileID: -2722309111935097343}
   m_Layer: 0
   m_Name: Flying Insect - Boss
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -468,8 +468,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyExplosionFX: {fileID: 8205374340673788306, guid: 7cf3a35d750801e4cac6cd279d5f095f, type: 3}
-  parent: {fileID: 6914682230222286977, guid: c08933f2ebc11d64a85ec28707692dca, type: 3}
   emissionMultiply: 2
+  coll: {fileID: 0}
   hitPoints: 50
   hitValue: 2000
   deathValue: 100000
+  power: 1
+  totalPoints: 0
+  pointsGain: 0

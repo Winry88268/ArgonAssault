@@ -6,15 +6,16 @@ public class Enemy : MonoBehaviour
 {
     [Header("System Assignments")]
     [Tooltip("Enemy FX upon taking Damage")] [SerializeField] GameObject enemyExplosionFX; 
-    [Tooltip("Collector for short lifespan Instantiated Game Objects")] [SerializeField] Transform parent;
     [SerializeField] float emissionMultiply = 1f;
+    [SerializeField] BoxCollider coll;
+
 
     [Header("Enemy Variable Settings")]
     [Tooltip("Enemy Hit Points before Destruction")] [SerializeField] float hitPoints = 1f;
     [Tooltip("Point Value for Hitting Enemy")] [SerializeField] float hitValue;
     [Tooltip("Point Value for Killing Enemy")] [SerializeField] int deathValue;
 
-    GameObject vfx;
+    GameObject vfx, parentGameObject;
     GameManager gm;
     Material thisMat;
     Color originalColor;
@@ -27,8 +28,12 @@ public class Enemy : MonoBehaviour
         gm = FindObjectOfType<GameManager>();
         thisMat = GetComponent<MeshRenderer>().material;
         originalColor = thisMat.color;
+        parentGameObject = GameObject.FindWithTag("SpawnAtRuntime");
 
         totalPoints = hitPoints * hitValue;
+        gm.nmy.Add(gameObject);
+
+        AddRigidbody();
     }
 
     // If HitFlash is not already running
@@ -39,6 +44,12 @@ public class Enemy : MonoBehaviour
         {
             StartCoroutine("HitFlash");
         }
+    }
+
+    void AddRigidbody()
+    {
+        Rigidbody rb = gameObject.AddComponent<Rigidbody>();
+        rb.useGravity = false;
     }
 
     // Enemy Collision with Particles
@@ -94,9 +105,14 @@ public class Enemy : MonoBehaviour
         gm.IncreaseScore(pointsGain);
         if(hitPoints < 0.01f)
         {
-            GetComponent<SphereCollider>().enabled = false;
+            DeCollide();
             Destruction();
         }
+    }
+
+    void DeCollide()
+    {
+        coll.enabled = false;
     }
 
     // Instantiate an instance of the enemy Explosion FX
@@ -106,7 +122,7 @@ public class Enemy : MonoBehaviour
     {
         gm.IncreaseScore(deathValue);
         vfx = Instantiate(enemyExplosionFX, transform.position, Quaternion.identity);
-        vfx.transform.parent = parent;
+        vfx.transform.parent = parentGameObject.transform;
         Invoke("Delete", 0.1f);
     }
 
